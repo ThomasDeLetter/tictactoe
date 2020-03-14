@@ -9,7 +9,7 @@ class TicTacToeTest {
     fun `should emit initial event at start of game`() {
         val ttt = TicTacToe()
         val observer = TestObserver<Board>()
-        ttt.observable.subscribe(observer)
+        ttt.turns.subscribe(observer)
 
         observer.assertValueCount(1)
     }
@@ -18,7 +18,7 @@ class TicTacToeTest {
     fun `should emit when cell filled`() {
         val ttt = TicTacToe()
         val observer = TestObserver<Board>()
-        ttt.observable.subscribe(observer)
+        ttt.turns.subscribe(observer)
 
         ttt.fill(0, 0)
 
@@ -32,7 +32,7 @@ class TicTacToeTest {
     fun `should not emit when cell already filled`() {
         val ttt = TicTacToe()
         val observer = TestObserver<Board>()
-        ttt.observable.subscribe(observer)
+        ttt.turns.subscribe(observer)
 
         ttt.fill(0, 0)
 
@@ -48,7 +48,7 @@ class TicTacToeTest {
     fun `should complete when game finished`() {
         val ttt = TicTacToe()
         val observer = TestObserver<Board>()
-        ttt.observable.subscribe(observer)
+        ttt.turns.subscribe(observer)
 
         ttt.apply {
             for (i in 0..2) {

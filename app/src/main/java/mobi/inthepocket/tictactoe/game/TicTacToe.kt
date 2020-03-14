@@ -4,15 +4,16 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
 open class TicTacToe {
-    private var board = Board()
-    private val subject: BehaviorSubject<Board> = BehaviorSubject.createDefault(board)
+    private val subject: BehaviorSubject<Board> = BehaviorSubject.createDefault(Board())
 
-    val observable: Observable<Board> = subject
+    private val board
+        inline get() = subject.value!!
+
+    val turns: Observable<Board> = subject
 
     fun fill(row: Int, column: Int): Boolean {
-        if (!board.isFinished && board[row, column].isEmpty) {
-            board = board.fill(row, column)
-            subject.onNext(board)
+        if (!subject.hasComplete() && board[row, column].isEmpty) {
+            subject.onNext(board.fill(row, column))
             if (board.isFinished)
                 subject.onComplete()
             return true
