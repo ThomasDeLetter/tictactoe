@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.withLatestFrom
 import kotlinx.android.synthetic.main.cell.view.*
-import mobi.inthepocket.tictactoe.game.TicTacToe
+import mobi.inthepocket.tictactoe.game.Player
+import mobi.inthepocket.tictactoe.game.Game
 
-class CellViewHolder(val game: TicTacToe, view: View): RecyclerView.ViewHolder(view) {
+class CellViewHolder(private val game: Game, private val player: Player, view: View): RecyclerView.ViewHolder(view) {
     private var disposable = CompositeDisposable()
 
     private val row
@@ -35,6 +37,8 @@ class CellViewHolder(val game: TicTacToe, view: View): RecyclerView.ViewHolder(v
             }.addTo(disposable)
 
         itemView.clicks()
+            .withLatestFrom(game.turns) { _, board -> board }
+            .filter { player == it.nextPlayer }
             .forEach {
                 game.fill(row, column)
             }.addTo(disposable)

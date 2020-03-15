@@ -24,7 +24,7 @@ class GameFragment: Fragment(R.layout.game) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         grid.apply {
             layoutManager = gridLayoutManager
-            adapter = BoardGridAdapter(gameViewModel.game)
+            adapter = BoardGridAdapter(gameViewModel.game, gameViewModel.player)
 
             addItemDecoration(DividerItemDecoration(context, HORIZONTAL))
             addItemDecoration(DividerItemDecoration(context, VERTICAL))

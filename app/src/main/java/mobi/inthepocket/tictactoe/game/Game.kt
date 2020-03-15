@@ -3,7 +3,7 @@ package mobi.inthepocket.tictactoe.game
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 
-open class TicTacToe {
+open class Game {
     private val subject: BehaviorSubject<Board> = BehaviorSubject.createDefault(Board())
 
     private val board
