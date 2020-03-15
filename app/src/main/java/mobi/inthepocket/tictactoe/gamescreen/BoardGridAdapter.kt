@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import mobi.inthepocket.tictactoe.R
-import mobi.inthepocket.tictactoe.game.Player
-import mobi.inthepocket.tictactoe.game.Game
+import javax.inject.Inject
 
-class BoardGridAdapter(private val game: Game, private val player: Player): Adapter<CellViewHolder>() {
+class BoardGridAdapter @Inject constructor(private val factory: CellViewHolder.Factory): Adapter<CellViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellViewHolder =
-        CellViewHolder(game, player, LayoutInflater.from(parent.context).inflate(R.layout.cell, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellViewHolder
+            = factory.create(LayoutInflater.from(parent.context).inflate(R.layout.cell, parent, false))
 
     override fun getItemCount(): Int = 9
 
