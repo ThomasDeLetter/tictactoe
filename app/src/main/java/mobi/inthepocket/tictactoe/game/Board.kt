@@ -36,13 +36,17 @@ class Board private constructor(private val grid: List<Cell>) {
         (diagonals + rows + columns).firstOrNull { it.isComplete }
     }
 
-    val isEmpty: Boolean = countFilled == 0
+    val isEmpty: Boolean
+        inline get() = countFilled == 0
 
-    val winner: Player? = winningRow?.first()?.player
+    val winner: Player?
+        inline get() = winningRow?.first()?.player
 
-    val isFinished: Boolean = winningRow != null || countFilled == 9
+    val isFinished: Boolean
+        inline get() = winningRow != null || countFilled == 9
 
-    val isDraw: Boolean = winningRow == null && isFinished
+    val isDraw: Boolean
+        inline get() = winningRow == null && isFinished
 
     fun fill(row: Int, column: Int): Board {
         check(!isFinished)
