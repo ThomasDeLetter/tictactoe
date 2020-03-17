@@ -1,10 +1,12 @@
 package mobi.inthepocket.tictactoe.game
 
 import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.ReplaySubject
 
 open class Game {
-    private val subject: BehaviorSubject<Board> = BehaviorSubject.createDefault(Board())
+    private val subject: ReplaySubject<Board> = ReplaySubject.createWithSize<Board>(1).apply {
+        onNext(Board())
+    }
 
     private val board
         inline get() = subject.value!!

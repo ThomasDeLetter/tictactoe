@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import mobi.inthepocket.tictactoe.startscreen.StartFragment
+import mobi.inthepocket.tictactoe.welcomescreen.WelcomeFragment
 
 @Module
 interface FragmentFactoryModule {
@@ -14,8 +14,8 @@ interface FragmentFactoryModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(StartFragment::class)
-    fun bindStartFragment(fragment : StartFragment) : Fragment
+    @FragmentKey(WelcomeFragment::class)
+    fun bindWelcomeFragment(fragment : WelcomeFragment) : Fragment
 
 }
 

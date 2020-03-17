@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         disposable = gameManager.navigator()
-            .forEach {fragment ->
+            .forEach { fragment ->
                 gameManager.inject(this)
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container, fragment, null)
@@ -34,5 +34,10 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         disposable.dispose()
+    }
+
+    override fun onBackPressed() {
+        if (!gameManager.endGame())
+            super.onBackPressed()
     }
 }

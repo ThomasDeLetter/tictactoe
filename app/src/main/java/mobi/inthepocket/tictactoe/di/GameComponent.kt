@@ -13,15 +13,10 @@ interface GameComponent {
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun player(player: Player): Builder
-        @BindsInstance
-        fun computer(computer: Computer): Builder
-        @BindsInstance
-        fun game(game: Game): Builder
+        fun humanPlayer(humanPlayer: Player): Builder
         fun build(): GameComponent
     }
 
     fun inject(activity: MainActivity)
-
-    val game: Game
+    fun inject(gameManager: GameManager)
 }

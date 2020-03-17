@@ -1,6 +1,6 @@
 package mobi.inthepocket.tictactoe.game
 
-class Board private constructor(private val grid: List<Cell>) {
+class Board private constructor(val cells: List<Cell>) {
 
     constructor(): this((0..8).map { Cell(it / 3, it % 3) })
 
@@ -9,16 +9,15 @@ class Board private constructor(private val grid: List<Cell>) {
     }
 
     val countFilled: Int by lazy {
-        grid.count { !it.isEmpty }
+        cells.count { !it.isEmpty }
     }
 
-
-    private val rows: List<Row> by lazy {
-        grid.chunked(3).map { Row(it) }
+    private val horizontalRows: List<Row> by lazy {
+        cells.chunked(3).map { Row(it) }
     }
 
-    private val columns: List<Row> by lazy {
-        grid.withIndex()
+    private val verticalRows: List<Row> by lazy {
+        cells.withIndex()
             .groupBy { it.index % 3 }
             .values
             .map { indexedColumn ->
@@ -28,12 +27,15 @@ class Board private constructor(private val grid: List<Cell>) {
 
     private val diagonals: List<Row> by lazy {
         (0..2 step 2).map { startIndex ->
-            Row(listOf(grid[startIndex], grid[4], grid[8 - startIndex]))
+            Row(listOf(cells[startIndex], cells[4], cells[8 - startIndex]))
         }
     }
 
+    val rows: List<Row>
+        get() = diagonals + horizontalRows + verticalRows
+
     val winningRow: Row? by lazy {
-        (diagonals + rows + columns).firstOrNull { it.isComplete }
+        rows.firstOrNull { it.isComplete }
     }
 
     val isEmpty: Boolean
@@ -51,10 +53,10 @@ class Board private constructor(private val grid: List<Cell>) {
     fun fill(row: Int, column: Int): Board {
         check(!isFinished)
         check(this[row, column].isEmpty)
-        return Board(grid.toMutableList().apply {
+        return Board(cells.toMutableList().apply {
             this[3 * row + column] = Cell(row, column, nextPlayer)
         })
     }
 
-    operator fun get(row: Int, column: Int): Cell = grid[3 * row + column]
+    operator fun get(row: Int, column: Int): Cell = cells[3 * row + column]
 }
