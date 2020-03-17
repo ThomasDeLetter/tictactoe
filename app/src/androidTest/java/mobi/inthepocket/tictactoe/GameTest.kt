@@ -1,8 +1,7 @@
 package mobi.inthepocket.tictactoe
 
-import android.content.pm.ActivityInfo
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -11,11 +10,14 @@ import androidx.test.rule.ActivityTestRule
 import mobi.inthepocket.tictactoe.di.gameManager
 import mobi.inthepocket.tictactoe.game.Player
 import mobi.inthepocket.tictactoe.main.MainActivity
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.AssertionError
 
 
 /**
@@ -47,12 +49,46 @@ class GameTest {
 
     @Test
     fun shouldBeEmptyAtStart() {
-        onView(withId(R.id.grid))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition(
-                    ITEM_BELOW_THE_FOLD,
-                    click()
-                )
-            )
+        onView(allOf(withParent(withRecyclerView(R.id.grid).atPosition(0)), withId(R.id.cell)))
+            .check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun shouldNotBeEmptyWhenClicked() {
+        onView(withRecyclerView(R.id.grid).atPosition(0))
+            .perform(click())
+
+        onView(allOf(withParent(withRecyclerView(R.id.grid).atPosition(0)), withId(R.id.cell)))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun shouldDisplayUserTurnText() {
+        onView(withId(R.id.nextPlayerTextView))
+            .check(matches(withText(activityRule.activity.getString(R.string.user_turn, Player.X))))
+    }
+
+    @Test
+    fun shouldDisplayComputerTurnText() {
+        onView(withRecyclerView(R.id.grid).atPosition(0))
+            .perform(click())
+        onView(withId(R.id.nextPlayerTextView))
+            .check(matches(withText(R.string.computer_turn)))
+    }
+
+    @Test
+    fun shouldShowRestartButton() {
+        for (i in (0..45)) {
+            onView(withRecyclerView(R.id.grid).atPosition(i % 9))
+                .perform(click())
+            Thread.sleep(1100)
+            try {
+                onView(withId(R.id.restart)).check(matches(isDisplayed()))
+                return
+            } catch (ignored: AssertionError) {
+                println("error")
+            }
+        }
+        onView(withId(R.id.restart)).check(matches(isDisplayed()))
     }
 }

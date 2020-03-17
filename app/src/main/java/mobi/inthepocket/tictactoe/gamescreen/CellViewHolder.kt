@@ -28,9 +28,10 @@ class CellViewHolder @AssistedInject constructor(private val game: Game, private
         game.turns
             .map { it[row, column] }
             .forEach {
-                when(it.player) {
-                    Player.X -> itemView.cell.setImageDrawable(itemView.context.getDrawable(R.drawable.x_light))
-                    Player.O -> itemView.cell.setImageDrawable(itemView.context.getDrawable(R.drawable.o_light))
+                itemView.cell.visibility = if (it.isEmpty) View.INVISIBLE else View.VISIBLE
+                when (it.player) {
+                    Player.X -> itemView.cell.setImageResource(R.drawable.x_light)
+                    Player.O -> itemView.cell.setImageResource(R.drawable.o_light)
                 }
             }.addTo(disposable)
 
@@ -38,9 +39,10 @@ class CellViewHolder @AssistedInject constructor(private val game: Game, private
             .lastElement()
             .filter { !it.isDraw && it[row, column] !in it.winningRow!! }
             .subscribe {
+                itemView.cell.visibility = if (it[row, column].isEmpty) View.INVISIBLE else View.VISIBLE
                 when(it[row, column].player) {
-                    Player.X -> itemView.cell.setImageDrawable(itemView.context.getDrawable(R.drawable.x_grey))
-                    Player.O -> itemView.cell.setImageDrawable(itemView.context.getDrawable(R.drawable.o_grey))
+                    Player.X -> itemView.cell.setImageResource(R.drawable.x_grey)
+                    Player.O -> itemView.cell.setImageResource(R.drawable.o_grey)
                 }
             }.addTo(disposable)
 
